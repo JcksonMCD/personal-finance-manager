@@ -20,6 +20,10 @@ public class User {
     @Size(max = 50)
     private String username;
 
+    @Column(name = "Name")
+    @NotNull
+    private String name;
+
     @Column(name = "Email", unique = true, nullable = false)
     @NotNull
     @Email
@@ -37,4 +41,19 @@ public class User {
     @Column(name = "UpdatedAt")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    // Constructors
+    public User() {
+    }
+
+    public User(Long userId, LocalDateTime updatedAt, LocalDateTime createdAt, String passwordHash, String email, String name, String username) {
+        this.userId = userId;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.name = name;
+        this.username = username;
+    }
+    
 }
