@@ -55,5 +55,61 @@ public class User {
         this.name = name;
         this.username = username;
     }
-    
+
+    // Getters and Setters
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public @NotNull @Size(max = 50) String getUsername() {
+        return username;
+    }
+
+    public void setUsername(@NotNull @Size(max = 50) String username) {
+        this.username = username;
+    }
+
+    public @NotNull String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull String name) {
+        this.name = name;
+    }
+
+    public @NotNull @Email @Size(max = 100) String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NotNull @Email @Size(max = 100) String email) {
+        this.email = email;
+    }
+
+    public @NotNull String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(@NotNull String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
