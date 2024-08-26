@@ -46,8 +46,7 @@ public class User {
     public User() {
     }
 
-    public User(Long userId, LocalDateTime updatedAt, LocalDateTime createdAt, String passwordHash, String email, String name, String username) {
-        this.userId = userId;
+    public User(LocalDateTime updatedAt, LocalDateTime createdAt, String passwordHash, String email, String name, String username) {
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
         this.passwordHash = passwordHash;
