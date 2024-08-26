@@ -48,4 +48,12 @@ public class UserRegistrationDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public @NotBlank(message = "Name is mandatory") String getName() {
+        return name;
+    }
+
+    public void setName(@NotBlank(message = "Name is mandatory") String name) {
+        this.name = name;
+    }
 }
