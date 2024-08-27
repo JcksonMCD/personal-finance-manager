@@ -44,6 +44,11 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @PreUpdate
+    private void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // Constructors
     public User() {
     }
