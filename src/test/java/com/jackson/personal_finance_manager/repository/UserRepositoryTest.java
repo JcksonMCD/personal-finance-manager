@@ -93,7 +93,7 @@ public class UserRepositoryTest {
 
         assertFalse(foundUser.isPresent(), "User should not be found");
     }
-    
+
     @Test
     public void testFindByEmailNotFound() {
         // Test finding a non-existent email
