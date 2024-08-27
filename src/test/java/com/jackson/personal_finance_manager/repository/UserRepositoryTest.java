@@ -76,5 +76,14 @@ public class UserRepositoryTest {
         assertEquals("test1@example.com", foundUser.get().getEmail(), "Email should match");
     }
 
+    @Test
+    public void testFindByEmail() {
+        // Test finding by email
+        Optional<User> foundUser = userRepository.findByEmail("test2@example.com");
 
+        assertTrue(foundUser.isPresent(), "User should be found");
+        assertEquals("testuser2", foundUser.get().getUsername(), "Username should match");
+        assertEquals("test2@example.com", foundUser.get().getEmail(), "Email should match");
+    }
+    
 }
