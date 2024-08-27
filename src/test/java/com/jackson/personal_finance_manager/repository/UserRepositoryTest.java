@@ -8,6 +8,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // Resets test context
 public class UserRepositoryTest {
 
     @Autowired
@@ -64,5 +66,15 @@ public class UserRepositoryTest {
         assertNotNull(savedUser.getUpdatedAt(), "UpdatedAt should not be null");
         assertEquals(savedUser.getCreatedAt(), savedUser.getUpdatedAt(), "CreatedAt and UpdatedAt should be the same");
     }
-    
+    @Test
+    public void testFindByUsername() {
+        // Test finding by username
+        Optional<User> foundUser = userRepository.findByUsername("testuser1");
+
+        assertTrue(foundUser.isPresent(), "User should be found");
+        assertEquals("testuser1", foundUser.get().getUsername(), "Username should match");
+        assertEquals("test1@example.com", foundUser.get().getEmail(), "Email should match");
+    }
+
+
 }
