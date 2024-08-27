@@ -1,6 +1,7 @@
 package com.jackson.personal_finance_manager.service;
 
 import com.jackson.personal_finance_manager.dto.userdtos.UserRegistrationDTO;
+import com.jackson.personal_finance_manager.exception.UserNotFoundException;
 import com.jackson.personal_finance_manager.model.User;
 import com.jackson.personal_finance_manager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long userID) {
-        return null;
+        return userRepository.findById(userID).orElseThrow(
+                () -> new UserNotFoundException("No User found at id: " + userID)
+        );
     }
 }
