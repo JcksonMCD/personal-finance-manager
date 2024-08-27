@@ -18,7 +18,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User createUser(UserRegistrationDTO userRegistrationDTO) {
+    public UserRegistrationDTO createUser(UserRegistrationDTO userRegistrationDTO) {
+        // Create user using dto information as only user types can be saved in the db
         User user = new User(
                 LocalDateTime.now(),
                 LocalDateTime.now(),
@@ -26,6 +27,11 @@ public class UserServiceImpl implements UserService {
                 userRegistrationDTO.getEmail(),
                 userRegistrationDTO.getName(),
                 userRegistrationDTO.getUsername());
-        return userRepository.save(user);
+
+        // Save to repository
+        userRepository.save(user);
+
+        // Return dto for memory saving and efficiency
+        return userRegistrationDTO;
     }
 }
