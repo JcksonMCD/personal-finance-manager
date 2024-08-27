@@ -40,4 +40,9 @@ public class UserServiceImpl implements UserService {
         // Return dto for memory saving and efficiency
         return userRegistrationDTO;
     }
+
+    @Override
+    public User getUserById(long userID) {
+        return null;
+    }
 }
