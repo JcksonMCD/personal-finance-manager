@@ -25,35 +25,35 @@ public class UserRegistrationDTO {
     private String password;
 
     // Getters and Setters
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public @NotBlank(message = "Name is mandatory") String getName() {
         return name;
     }
 
     public void setName(@NotBlank(message = "Name is mandatory") String name) {
         this.name = name;
+    }
+
+    public @NotBlank(message = "Username is mandatory") @Size(max = 50, message = "Username must be less than 50 characters") String getUsername() {
+        return username;
+    }
+
+    public void setUsername(@NotBlank(message = "Username is mandatory") @Size(max = 50, message = "Username must be less than 50 characters") String username) {
+        this.username = username;
+    }
+
+    public @NotBlank(message = "Email is mandatory") @Email(message = "Email should be valid") @Size(max = 100, message = "Email must be less than 100 characters") String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NotBlank(message = "Email is mandatory") @Email(message = "Email should be valid") @Size(max = 100, message = "Email must be less than 100 characters") String email) {
+        this.email = email;
+    }
+
+    public @NotBlank(message = "Password is mandatory") String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NotBlank(message = "Password is mandatory") String password) {
+        this.password = password;
     }
 }
