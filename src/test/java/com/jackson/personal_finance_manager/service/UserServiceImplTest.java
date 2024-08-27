@@ -14,8 +14,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
     @InjectMocks
@@ -64,5 +63,30 @@ class UserServiceImplTest {
         verify(userRepository).findByEmail(userDTO.getEmail());
         verify(passwordEncoder).encode(userDTO.getPassword());
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    public void testCreateUser_UsernameAlreadyExists() {
+        // Given
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("existinguser");
+        userDTO.setName("Existing User");
+        userDTO.setEmail("existinguser@example.com");
+        userDTO.setPassword("password");
+
+        // Mocking repository behavior
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.of(new User()));
+
+        // When & Then
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            userService.createUser(userDTO);
+        });
+
+        assertEquals("Username already exists", thrown.getMessage());
+
+        // Verify interactions
+        verify(userRepository).findByUsername(userDTO.getUsername());
+        verify(userRepository, never()).findByEmail(userDTO.getEmail());
+        verify(userRepository, never()).save(any(User.class));
     }
 }
