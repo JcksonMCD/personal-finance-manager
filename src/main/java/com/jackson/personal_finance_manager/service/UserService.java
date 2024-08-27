@@ -5,4 +5,6 @@ import com.jackson.personal_finance_manager.model.User;
 
 public interface UserService {
     UserRegistrationDTO createUser(UserRegistrationDTO userRegistrationDTO);
+
+    User getUserById(long userID);
 }
