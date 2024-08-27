@@ -85,5 +85,13 @@ public class UserRepositoryTest {
         assertEquals("testuser2", foundUser.get().getUsername(), "Username should match");
         assertEquals("test2@example.com", foundUser.get().getEmail(), "Email should match");
     }
+
+    @Test
+    public void testFindByUsernameNotFound() {
+        // Test finding a non-existent username
+        Optional<User> foundUser = userRepository.findByUsername("nonexistentuser");
+
+        assertFalse(foundUser.isPresent(), "User should not be found");
+    }
     
 }
