@@ -1,5 +1,7 @@
 package com.jackson.personal_finance_manager.service;
 
+import com.jackson.personal_finance_manager.dto.userdtos.UserRegistrationDTO;
+import com.jackson.personal_finance_manager.model.User;
 import com.jackson.personal_finance_manager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class UserServiceImplTest {
     @InjectMocks
@@ -26,6 +33,36 @@ class UserServiceImplTest {
     }
 
     @Test
-    void createUser() {
+    public void testCreateUser_Success() {
+        // Given
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("newuser");
+        userDTO.setName("New User");
+        userDTO.setEmail("newuser@example.com");
+        userDTO.setPassword("password");
+
+        // Mocking repository and encoder behavior
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(userDTO.getPassword())).thenReturn("encodedpassword");
+
+        // Mocking save behavior
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+
+        // When
+        UserRegistrationDTO result = userService.createUser(userDTO);
+
+        // Then
+        assertNotNull(result, "Result should not be null");
+        assertEquals("newuser", result.getUsername(), "Username should match");
+        assertEquals("New User", result.getName(), "Name should match");
+        assertEquals("newuser@example.com", result.getEmail(), "Email should match");
+        assertEquals("password", result.getPassword(), "Password should match");
+
+        // Verify interactions
+        verify(userRepository).findByUsername(userDTO.getUsername());
+        verify(userRepository).findByEmail(userDTO.getEmail());
+        verify(passwordEncoder).encode(userDTO.getPassword());
+        verify(userRepository).save(any(User.class));
     }
 }
