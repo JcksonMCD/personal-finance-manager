@@ -89,4 +89,29 @@ class UserServiceImplTest {
         verify(userRepository, never()).findByEmail(userDTO.getEmail());
         verify(userRepository, never()).save(any(User.class));
     }
+    @Test
+    public void testCreateUser_EmailAlreadyExists() {
+        // Given
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("newuser");
+        userDTO.setName("New User");
+        userDTO.setEmail("existingemail@example.com");
+        userDTO.setPassword("password");
+
+        // Mocking repository behavior
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(new User()));
+
+        // When & Then
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            userService.createUser(userDTO);
+        });
+
+        assertEquals("Email already exists", thrown.getMessage());
+
+        // Verify interactions
+        verify(userRepository).findByUsername(userDTO.getUsername());
+        verify(userRepository).findByEmail(userDTO.getEmail());
+        verify(userRepository, never()).save(any(User.class));
+    }
 }
