@@ -94,4 +94,11 @@ public class UserRepositoryTest {
         assertFalse(foundUser.isPresent(), "User should not be found");
     }
     
+    @Test
+    public void testFindByEmailNotFound() {
+        // Test finding a non-existent email
+        Optional<User> foundUser = userRepository.findByEmail("nonexistent@example.com");
+
+        assertFalse(foundUser.isPresent(), "User should not be found");
+    }
 }
