@@ -19,14 +19,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRegistrationDTO createUser(UserRegistrationDTO userRegistrationDTO) {
+        // Validate input data and check for existing username/email if needed
+        if (userRepository.findByUsername(userRegistrationDTO.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        if (userRepository.findByEmail(userRegistrationDTO.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
         // Create user using dto information as only user types can be saved in the db
-        User user = new User(
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                passwordEncoder.encode(userRegistrationDTO.getPassword()),
-                userRegistrationDTO.getEmail(),
-                userRegistrationDTO.getName(),
-                userRegistrationDTO.getUsername());
+        User user = new User();
+        user.setUsername(userRegistrationDTO.getUsername());
+        user.setName(userRegistrationDTO.getName());
+        user.setEmail(userRegistrationDTO.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(userRegistrationDTO.getPassword()));
 
         // Save to repository
         userRepository.save(user);

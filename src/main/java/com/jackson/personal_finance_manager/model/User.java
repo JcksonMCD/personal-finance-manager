@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +48,14 @@ public class User {
     public User() {
     }
 
-    public User(LocalDateTime updatedAt, LocalDateTime createdAt, String passwordHash, String email, String name, String username) {
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
-        this.passwordHash = passwordHash;
-        this.email = email;
-        this.name = name;
+    public User(Long userId, String username, String name, String email, String passwordHash, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
         this.username = username;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getters and Setters
