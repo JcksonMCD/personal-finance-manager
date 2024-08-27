@@ -31,6 +31,7 @@ class UserControllerTest {
         // Mocking a User object and the service layer
         UserRegistrationDTO userDTO = new UserRegistrationDTO();
         userDTO.setUsername("testuser");
+        userDTO.setName("Test");
         userDTO.setEmail("test@example.com");
         userDTO.setPassword("password123");
 
@@ -45,7 +46,7 @@ class UserControllerTest {
                         .content(userJson))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("testuser"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("test@example.com"));
     }
 }
