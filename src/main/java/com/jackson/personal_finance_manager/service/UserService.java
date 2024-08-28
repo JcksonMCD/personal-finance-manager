@@ -7,4 +7,6 @@ public interface UserService {
     UserRegistrationDTO createUser(UserRegistrationDTO userRegistrationDTO);
 
     User getUserById(long userID);
+
+    UserRegistrationDTO editUser(long id, UserRegistrationDTO user);
 }

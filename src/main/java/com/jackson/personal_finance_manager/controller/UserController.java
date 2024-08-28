@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> editUser(
+    public ResponseEntity<UserRegistrationDTO> editUser(
             @PathVariable long id,
             @RequestBody UserRegistrationDTO user
     ){
