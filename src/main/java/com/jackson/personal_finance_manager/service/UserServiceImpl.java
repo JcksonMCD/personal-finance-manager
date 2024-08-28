@@ -72,4 +72,13 @@ public class UserServiceImpl implements UserService {
         // Save updated user
         return userRepository.save(existingUser);
     }
+
+    @Override
+    public void deleteUserById(long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("No user found at this id so no deletion has taken place.")
+        );
+
+        userRepository.delete(user);
+    }
 }
