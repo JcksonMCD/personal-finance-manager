@@ -114,4 +114,30 @@ class UserServiceImplTest {
         verify(userRepository).findByEmail(userDTO.getEmail());
         verify(userRepository, never()).save(any(User.class));
     }
+
+    @Test
+    public void testGetUserById_Success() {
+        // Arrange
+        User user = new User();
+        user.setUserId(1L);
+        user.setUsername("testuser");
+        user.setName("Test");
+        user.setEmail("test@example.com");
+
+        // Mocking repository behavior
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        // Act
+        User result = userService.getUserById(1L);
+
+        // Assert
+        assertNotNull(result, "Result should not be null");
+        assertEquals(1L, result.getUserId(), "User ID should match");
+        assertEquals("testuser", result.getUsername(), "Username should match");
+        assertEquals("Test", result.getName(), "Name should match");
+        assertEquals("test@example.com", result.getEmail(), "Email should match");
+
+        verify(userRepository).findById(1L);
+    }
+
 }
