@@ -191,7 +191,7 @@ class UserServiceImplTest {
         verify(passwordEncoder).encode(userDTO.getPassword());
         verify(userRepository).save(existingUser);
     }
-    
+
     @Test
     public void testEditUser_UserNotFound() {
         // Arrange
