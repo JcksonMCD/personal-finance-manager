@@ -107,4 +107,21 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Edited Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("test@newexample.com"));
     }
+
+    @Test
+    void testDeleteUser() throws Exception{
+        // Arrange
+        long userId = 1L;
+        String expectedMessage = "User deleted at id: " + userId;
+
+        // Act
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/users/{id}", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(expectedMessage));
+
+        // Assert
+        verify(userService, times(1)).deleteUserById(userId);
+    }
 }

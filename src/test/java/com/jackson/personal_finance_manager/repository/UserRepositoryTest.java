@@ -146,4 +146,18 @@ public class UserRepositoryTest {
         assertEquals("Updated Name", updatedUser.getName());
         assertEquals("updated@example.com", updatedUser.getEmail());
     }
+
+    @Test
+    public void testDeleteUserById() {
+        // Verify the user exists before deletion
+        Optional<User> foundUser = userRepository.findById(1L);
+        assertTrue(foundUser.isPresent(), "User should be present before deletion");
+
+        // Delete the user
+        userRepository.deleteById(1L);
+
+        // Verify deletion
+        Optional<User> deletedUser = userRepository.findById(1L);
+        assertFalse(deletedUser.isPresent(), "User should not be present after deletion");
+    }
 }
