@@ -101,4 +101,18 @@ public class UserRepositoryTest {
 
         assertFalse(foundUser.isPresent(), "User should not be found");
     }
+
+    @Test
+    void testFindById() {
+        // Act: Retrieve the user by ID
+        Optional<User> foundUser = userRepository.findById(1L);
+
+        // Assert: Verify the retrieved user matches the saved user
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getUsername()).isEqualTo("testuser1");
+        assertThat(foundUser.get().getName()).isEqualTo("Test User 1");
+        assertThat(foundUser.get().getEmail()).isEqualTo("test1@example.com");
+    }
+
+
 }
