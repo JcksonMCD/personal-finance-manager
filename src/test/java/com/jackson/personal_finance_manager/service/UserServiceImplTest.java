@@ -192,4 +192,25 @@ class UserServiceImplTest {
         verify(userRepository).save(existingUser);
     }
     
+    @Test
+    public void testEditUser_UserNotFound() {
+        // Arrange
+        long userId = 1L;
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("newusername");
+
+        // Act
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Assert
+        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> {
+            userService.editUser(userId, userDTO);
+        });
+
+        assertEquals("No User found at id: " + userId, thrown.getMessage());
+
+        verify(userRepository).findById(userId);
+        verifyNoMoreInteractions(userRepository);
+        verifyNoInteractions(passwordEncoder);
+    }
 }
