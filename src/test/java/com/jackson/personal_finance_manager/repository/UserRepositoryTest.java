@@ -101,4 +101,49 @@ public class UserRepositoryTest {
 
         assertFalse(foundUser.isPresent(), "User should not be found");
     }
+
+    @Test
+    void testFindById() {
+        // Act: Retrieve the user by ID
+        Optional<User> foundUser = userRepository.findById(1L);
+
+        // Assert: Verify the retrieved user matches the saved user
+        assertThat(foundUser).isPresent();
+        assertThat(foundUser.get().getUsername()).isEqualTo("testuser1");
+        assertThat(foundUser.get().getName()).isEqualTo("Test User 1");
+        assertThat(foundUser.get().getEmail()).isEqualTo("test1@example.com");
+    }
+
+    @Test
+    void testFindByIdWhenUserIsNotPresent() {
+        // Act: Retrieve the user by ID
+        Optional<User> foundUser = userRepository.findById(10L);
+
+        // Assert: Verify the retrieved user matches the saved user
+        assertFalse(foundUser.isPresent());
+    }
+
+    @Test
+    public void testUpdateUser() {
+        // Retrieve the user
+        User user = userRepository.findById(1L).orElse(null);
+        assert user != null;
+
+        // Update user details
+        user.setUsername("updateduser");
+        user.setName("Updated Name");
+        user.setEmail("updated@example.com");
+
+        // Save the updated user
+        userRepository.save(user);
+
+        // Retrieve the updated user
+        User updatedUser = userRepository.findById(1L).orElse(null);
+        assert updatedUser != null;
+
+        // Verify the updated details
+        assertEquals("updateduser", updatedUser.getUsername());
+        assertEquals("Updated Name", updatedUser.getName());
+        assertEquals("updated@example.com", updatedUser.getEmail());
+    }
 }
