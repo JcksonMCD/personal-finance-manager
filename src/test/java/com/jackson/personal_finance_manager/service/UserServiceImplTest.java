@@ -1,6 +1,7 @@
 package com.jackson.personal_finance_manager.service;
 
 import com.jackson.personal_finance_manager.dto.userdtos.UserRegistrationDTO;
+import com.jackson.personal_finance_manager.exception.UserNotFoundException;
 import com.jackson.personal_finance_manager.model.User;
 import com.jackson.personal_finance_manager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -139,5 +140,18 @@ class UserServiceImplTest {
 
         verify(userRepository).findById(1L);
     }
+    @Test
+    public void testGetUserById_NotFound() {
+        // Act
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
+        // Assert
+        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> {
+            userService.getUserById(1L);
+        });
+
+        assertEquals("No User found at id: 1", thrown.getMessage());
+
+        verify(userRepository).findById(1L);
+    }
 }
