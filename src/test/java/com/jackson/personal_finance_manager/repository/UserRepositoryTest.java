@@ -122,4 +122,28 @@ public class UserRepositoryTest {
         // Assert: Verify the retrieved user matches the saved user
         assertFalse(foundUser.isPresent());
     }
+
+    @Test
+    public void testUpdateUser() {
+        // Retrieve the user
+        User user = userRepository.findById(1L).orElse(null);
+        assert user != null;
+
+        // Update user details
+        user.setUsername("updateduser");
+        user.setName("Updated Name");
+        user.setEmail("updated@example.com");
+
+        // Save the updated user
+        userRepository.save(user);
+
+        // Retrieve the updated user
+        User updatedUser = userRepository.findById(1L).orElse(null);
+        assert updatedUser != null;
+
+        // Verify the updated details
+        assertEquals("updateduser", updatedUser.getUsername());
+        assertEquals("Updated Name", updatedUser.getName());
+        assertEquals("updated@example.com", updatedUser.getEmail());
+    }
 }
