@@ -154,4 +154,42 @@ class UserServiceImplTest {
 
         verify(userRepository).findById(1L);
     }
+
+    @Test
+    public void testEditUser_Success() {
+        // Arrange
+        long userId = 1L;
+        User existingUser = new User();
+        existingUser.setUserId(userId);
+        existingUser.setUsername("oldusername");
+        existingUser.setName("Old Name");
+        existingUser.setEmail("old@example.com");
+        existingUser.setPasswordHash("oldhashedpassword");
+
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("newusername");
+        userDTO.setName("New Name");
+        userDTO.setEmail("new@example.com");
+        userDTO.setPassword("newpassword");
+
+        // Mock repository and encoder behavior
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(passwordEncoder.encode(userDTO.getPassword())).thenReturn("newhashedpassword");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+
+        // Act
+        User updatedUser = userService.editUser(userId, userDTO);
+
+        // Assert
+        assertNotNull(updatedUser, "Updated user should not be null");
+        assertEquals("newusername", updatedUser.getUsername(), "Username should be updated");
+        assertEquals("New Name", updatedUser.getName(), "Name should be updated");
+        assertEquals("new@example.com", updatedUser.getEmail(), "Email should be updated");
+        assertEquals("newhashedpassword", updatedUser.getPasswordHash(), "Password hash should be updated");
+
+        verify(userRepository).findById(userId);
+        verify(passwordEncoder).encode(userDTO.getPassword());
+        verify(userRepository).save(existingUser);
+    }
+    
 }
