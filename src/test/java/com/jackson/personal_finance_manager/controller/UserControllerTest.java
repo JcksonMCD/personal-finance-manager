@@ -76,4 +76,35 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("test@example.com"));
     }
+
+    @Test
+    void editUserById() throws Exception {
+        // Mocking a User object and the service layer
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
+        userDTO.setUsername("Editedtestuser");
+        userDTO.setName("Edited Test");
+        userDTO.setEmail("test@newexample.com");
+        userDTO.setPassword("password123");
+
+        User user = new User();
+        user.setUserId(1L);
+        user.setUsername("Editedtestuser");
+        user.setName("Edited Test");
+        user.setEmail("test@newexample.com");
+
+        when(userService.editUser(eq(1L), any(UserRegistrationDTO.class))).thenReturn(user);
+
+        // Convert the userDTO object to JSON format
+        String userJson = "{ \"username\": \"Editedtestuser\", \"name\": \"Edited Test\", \"email\": \"test@newexample.com\", \"password\": \"password123\" }";
+
+        // Perform a GET request
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Editedtestuser"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Edited Test"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("test@newexample.com"));
+    }
 }
