@@ -48,4 +48,28 @@ public class UserServiceImpl implements UserService {
                 () -> new UserNotFoundException("No User found at id: " + userID)
         );
     }
+
+    @Override
+    public User editUser(long id, UserRegistrationDTO user) {
+        // Find the user by ID
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("No User found at id: " + id));
+
+        // Update user details
+        if (user.getUsername() != null) {
+            existingUser.setUsername(user.getUsername());
+        }
+        if (user.getName() != null) {
+            existingUser.setName(user.getName());
+        }
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null) {
+            existingUser.setPasswordHash(passwordEncoder.encode(user.getPassword()));
+        }
+
+        // Save updated user
+        return userRepository.save(existingUser);
+    }
 }

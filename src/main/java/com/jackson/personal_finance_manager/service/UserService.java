@@ -8,5 +8,5 @@ public interface UserService {
 
     User getUserById(long userID);
 
-    UserRegistrationDTO editUser(long id, UserRegistrationDTO user);
+    User editUser(long id, UserRegistrationDTO user);
 }
