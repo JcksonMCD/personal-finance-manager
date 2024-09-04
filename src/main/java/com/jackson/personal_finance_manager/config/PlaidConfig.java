@@ -5,6 +5,8 @@ import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.plaid.client.PlaidClient;
+
 
 @Configuration
 public class PlaidConfig {
@@ -17,6 +19,14 @@ public class PlaidConfig {
 
     @Value("${plaid.env}")
     private String plaidEnv;
+
+    @Bean
+    public PlaidClient plaidClient() {
+        return PlaidClient.newBuilder()
+                .clientIdAndSecret(clientId, secret)
+                .sandboxBaseUrl() // Sandbo for dev
+                .build();
+    }
 
     @Bean
     public OkHttpClient okHttpClient() {
