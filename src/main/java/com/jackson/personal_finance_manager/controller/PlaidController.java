@@ -2,6 +2,7 @@ package com.jackson.personal_finance_manager.controller;
 
 import com.jackson.personal_finance_manager.service.PlaidService;
 import com.plaid.client.response.AuthGetResponse;
+import com.plaid.client.response.TransactionsGetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +53,21 @@ public class PlaidController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving account info");
+        }
+    }
+
+    @RequestMapping(value="/transactions", method=POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity getTransactions() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -30);
+        Date startDate = cal.getTime();
+        Date endDate = new Date();
+
+        try {
+            TransactionsGetResponse response = plaidService.getTransactions(startDate, endDate);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving transactions");
         }
     }
 }
