@@ -20,6 +20,10 @@ public class PlaidAuthService {
         return itemId;
     }
 
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
     // Clear the stored access token and item ID
     public void clearTokens() {
         this.accessToken = null;
