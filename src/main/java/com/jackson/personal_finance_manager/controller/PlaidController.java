@@ -1,6 +1,7 @@
 package com.jackson.personal_finance_manager.controller;
 
 import com.jackson.personal_finance_manager.service.PlaidService;
+import com.plaid.client.response.AuthGetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 
@@ -36,6 +39,16 @@ public class PlaidController {
             return ResponseEntity.ok(data);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error exchanging token");
+        }
+    }
+
+    @RequestMapping(value="/accounts", method=GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity getAccount() {
+        try {
+            AuthGetResponse response = plaidService.getAccountInfo();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving account info");
         }
     }
 }
