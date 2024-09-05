@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class PlaidAuthService {
     private String accessToken;
     private String itemId;
-    
+
     public String getAccessToken() {
         return accessToken;
     }
@@ -20,8 +20,9 @@ public class PlaidAuthService {
         return itemId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    // Clear the stored access token and item ID
+    public void clearTokens() {
+        this.accessToken = null;
+        this.itemId = null;
     }
-
 }
