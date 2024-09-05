@@ -11,21 +11,41 @@ import com.plaid.client.PlaidClient;
 @Configuration
 public class PlaidConfig {
 
-    @Value("${plaid.clientId}")
-    private String clientId;
+    @Value("${PLAID_CLIENT_ID}")
+    private String plaidClientId;
 
-    @Value("${plaid.secret}")
-    private String secret;
+    @Value("${PLAID_SECRET}")
+    private String plaidSecret;
 
-    @Value("${plaid.env}")
+    @Value("${PLAID_PUBLIC_KEY}")
+    private String plaidPublicKey;
+
+    @Value("#{systemProperties['PLAID_ENV'] ?: 'sandbox'}") // set to sandbox for dev env
     private String plaidEnv;
+
 
     @Bean
     public PlaidClient plaidClient() {
-        return PlaidClient.newBuilder()
-                .clientIdAndSecret(clientId, secret)
-                .sandboxBaseUrl() // Sandbo for dev
-                .build();
+        PlaidClient.Builder clientBuilder = PlaidClient.newBuilder()
+                .clientIdAndSecret(plaidClientId, plaidSecret)
+                .publicKey(plaidPublicKey);
+
+
+        switch (plaidEnv.toLowerCase()) {
+            case "sandbox":
+                clientBuilder.sandboxBaseUrl();
+                break;
+            case "development":
+                clientBuilder.developmentBaseUrl();
+                break;
+            case "production":
+                clientBuilder.productionBaseUrl();
+                break;
+            default:
+                clientBuilder.sandboxBaseUrl();
+        }
+
+        return clientBuilder.build();
     }
 
     @Bean
