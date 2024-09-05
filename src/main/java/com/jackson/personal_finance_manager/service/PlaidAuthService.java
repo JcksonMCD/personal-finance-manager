@@ -5,4 +5,7 @@ import org.springframework.stereotype.Service;
 // For storing plaid service tokens
 @Service
 public class PlaidAuthService {
+    private String accessToken;
+    private String itemId;
+    
 }
