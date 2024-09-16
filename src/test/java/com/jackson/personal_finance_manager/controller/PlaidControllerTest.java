@@ -68,5 +68,18 @@ public class PlaidControllerTest {
 
         verify(plaidService, times(1)).exchangePublicToken(publicToken);
     }
-    
+    @Test
+    public void testGetAccountSuccess() throws Exception {
+        AuthGetResponse authGetResponse = mock(AuthGetResponse.class);
+
+        when(plaidService.getAccountInfo()).thenReturn(authGetResponse);
+
+        mockMvc.perform(get("/plaid/accounts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{}"));
+
+        verify(plaidService, times(1)).getAccountInfo();
+    }
+
 }
