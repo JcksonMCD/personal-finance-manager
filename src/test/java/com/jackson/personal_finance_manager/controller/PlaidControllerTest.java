@@ -1,20 +1,24 @@
 package com.jackson.personal_finance_manager.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jackson.personal_finance_manager.service.PlaidService;
 import com.plaid.client.response.AuthGetResponse;
 import com.plaid.client.response.TransactionsGetResponse;
+import com.plaid.client.response.TransactionsGetResponse.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -29,6 +33,8 @@ public class PlaidControllerTest {
 
     @Mock
     private PlaidService plaidService;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private PlaidController plaidController;
@@ -93,4 +99,16 @@ public class PlaidControllerTest {
 
         verify(plaidService, times(1)).getAccountInfo();
     }
+    @Test
+    public void testGetTransactionsSuccess() throws Exception {
+        TransactionsGetResponse mockResponse = new TransactionsGetResponse();
+        
+        when(plaidService.getTransactions(any(Date.class), any(Date.class))).thenReturn(mockResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/plaid/transactions")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(mockResponse)));
+    }
+
 }
