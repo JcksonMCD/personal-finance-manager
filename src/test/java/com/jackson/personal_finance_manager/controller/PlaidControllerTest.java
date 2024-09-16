@@ -102,7 +102,7 @@ public class PlaidControllerTest {
     @Test
     public void testGetTransactionsSuccess() throws Exception {
         TransactionsGetResponse mockResponse = new TransactionsGetResponse();
-        
+
         when(plaidService.getTransactions(any(Date.class), any(Date.class))).thenReturn(mockResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/plaid/transactions")
@@ -110,5 +110,14 @@ public class PlaidControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(mockResponse)));
     }
+    @Test
+    public void testGetTransactionsFailure() throws Exception {
+        when(plaidService.getTransactions(any(Date.class), any(Date.class)))
+                .thenThrow(new RuntimeException("Service failure"));
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/plaid/transactions")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.content().string("Error retrieving transactions"));
+    }
 }
