@@ -1,6 +1,8 @@
 package com.jackson.personal_finance_manager.controller;
 
 import com.jackson.personal_finance_manager.service.PlaidService;
+import com.plaid.client.response.AuthGetResponse;
+import com.plaid.client.response.TransactionsGetResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+
+import java.util.Calendar;
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -49,5 +54,19 @@ public class PlaidControllerTest {
 
         verify(plaidService, times(1)).exchangePublicToken(publicToken);
     }
+    @Test
+    public void testGetAccessTokenFailure() throws Exception {
+        String publicToken = "test_public_token";
 
+        when(plaidService.exchangePublicToken(publicToken)).thenThrow(new RuntimeException("Service error"));
+
+        mockMvc.perform(post("/plaid/get_access_token")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("public_token", publicToken))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("Error exchanging token"));
+
+        verify(plaidService, times(1)).exchangePublicToken(publicToken);
+    }
+    
 }
