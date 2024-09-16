@@ -82,4 +82,15 @@ public class PlaidControllerTest {
         verify(plaidService, times(1)).getAccountInfo();
     }
 
+    @Test
+    public void testGetAccountFailure() throws Exception {
+        when(plaidService.getAccountInfo()).thenThrow(new RuntimeException("Service error"));
+
+        mockMvc.perform(get("/plaid/accounts")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("Error retrieving account info"));
+
+        verify(plaidService, times(1)).getAccountInfo();
+    }
 }
