@@ -4,6 +4,10 @@ import com.plaid.client.PlaidClient;
 import com.plaid.client.request.*;
 import com.plaid.client.PlaidApiService;
 import com.plaid.client.response.*;
+import okhttp3.MediaType;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -77,7 +81,37 @@ public class PlaidServiceImplTest {
         verify(plaidAuthService).setItemId(expectedItemId);
     }
 
+    @Test
+    void testExchangePublicTokenFailure() throws IOException {
+        // Arrange
+        String publicToken = "public-test-token";
 
+        ResponseBody errorBody = ResponseBody.create(
+                "{\"error\": \"Invalid public token\"}", MediaType.get("application/json")
+        );
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url("https://mock.plaid.com/item/public_token/exchange")
+                .build();
+
+        okhttp3.Response rawResponse = new okhttp3.Response.Builder()
+                .request(request)
+                .protocol(Protocol.HTTP_1_1)
+                .code(400)
+                .message("Bad Request")
+                .build();
+
+        // Mock the Retrofit response
+        Response<ItemPublicTokenExchangeResponse> mockResponse = Response.error(errorBody, rawResponse);
+
+        // Act
+        when(plaidApiService.itemPublicTokenExchange(any(ItemPublicTokenExchangeRequest.class)))
+                .thenReturn(mockExchangeCall);
+        when(mockExchangeCall.execute()).thenReturn(mockResponse);
+
+        // Assert
+        assertThrows(RuntimeException.class, () -> plaidServiceImpl.exchangePublicToken(publicToken));
+    }
 
 
 
