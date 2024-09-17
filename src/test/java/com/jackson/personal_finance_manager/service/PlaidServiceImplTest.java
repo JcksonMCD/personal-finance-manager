@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -147,5 +148,21 @@ public class PlaidServiceImplTest {
         assertNotNull(response);
     }
 
+    @Test
+    void testGetTransactionsSuccess() throws IOException {
+        Date startDate = new Date();
+        Date endDate = new Date();
+        TransactionsGetResponse transactionsGetResponse = new TransactionsGetResponse(); // Initialize as needed
+
+        when(plaidAuthService.getAccessToken()).thenReturn("valid-access-token");
+        Response<TransactionsGetResponse> retrofitResponse = Response.success(transactionsGetResponse);
+        Call<TransactionsGetResponse> mockCall = mock(Call.class);
+        when(mockCall.execute()).thenReturn(retrofitResponse);
+        when(plaidClient.service().transactionsGet(any(TransactionsGetRequest.class))).thenReturn(mockCall);
+
+        TransactionsGetResponse result = plaidServiceImpl.getTransactions(startDate, endDate);
+
+        assertNotNull(result);
+    }
 
 }
