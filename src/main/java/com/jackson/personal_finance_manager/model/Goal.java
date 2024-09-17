@@ -1,10 +1,6 @@
 package com.jackson.personal_finance_manager.model;
 
-package com.example.demo.entity;
-
 import jakarta.persistence.*;
-
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
