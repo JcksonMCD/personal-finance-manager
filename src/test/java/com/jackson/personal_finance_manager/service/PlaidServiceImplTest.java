@@ -113,6 +113,39 @@ public class PlaidServiceImplTest {
         assertThrows(RuntimeException.class, () -> plaidServiceImpl.exchangePublicToken(publicToken));
     }
 
+    @Test
+    void testGetAccountInfoSuccess() throws IOException {
+        // Arrange
+        String accessToken = "valid-access-token";
+        when(plaidAuthService.getAccessToken()).thenReturn(accessToken);
+
+        AuthGetResponse mockAuthGetResponse = new AuthGetResponse();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url("https://mock.plaid.com/auth/get")
+                .build();
+
+        okhttp3.Response rawResponse = new okhttp3.Response.Builder()
+                .request(request)
+                .protocol(Protocol.HTTP_1_1)
+                .code(200)
+                .message("OK")
+                .body(ResponseBody.create(
+                        "{\"account\": \"details\"}", MediaType.get("application/json")
+                ))
+                .build();
+
+        Response<AuthGetResponse> mockResponse = Response.success(mockAuthGetResponse);
+
+        // Act
+        when(plaidApiService.authGet(any(AuthGetRequest.class))).thenReturn(mockAuthGetCall);
+        when(mockAuthGetCall.execute()).thenReturn(mockResponse);
+
+        AuthGetResponse response = plaidServiceImpl.getAccountInfo();
+
+        // Assert
+        assertNotNull(response);
+    }
 
 
 }
