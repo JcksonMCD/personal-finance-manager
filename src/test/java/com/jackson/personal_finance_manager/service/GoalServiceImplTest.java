@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,5 +42,20 @@ class GoalServiceImplTest {
         Goal savedGoal = goalService.saveGoal(goal);
         assertNotNull(savedGoal);
         assertEquals(goal.getName(), savedGoal.getName());
+    }
+
+    @Test
+    void testGetGoalById() {
+        Goal goal = new Goal();
+        goal.setName("Test Goal");
+        goal.setTargetAmount(BigDecimal.valueOf(1000.00));
+        goal.setSavedAmount(BigDecimal.valueOf(500.00));
+        goal.setDeadline(LocalDateTime.now().plusDays(10));
+
+        when(goalRepository.findById(1L)).thenReturn(Optional.of(goal));
+
+        Optional<Goal> foundGoal = goalService.getGoalById(1L);
+        assertNotNull(foundGoal);
+        assertEquals(goal.getName(), foundGoal.orElse(null).getName());
     }
 }
