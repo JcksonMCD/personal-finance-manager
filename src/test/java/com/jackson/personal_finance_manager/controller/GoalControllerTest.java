@@ -64,6 +64,16 @@ class GoalControllerTest {
 
     @Test
     void testGetGoalById() throws Exception {
+        Goal goal = new Goal();
+        goal.setName("Test Goal");
+        goal.setTargetAmount(BigDecimal.valueOf(1000.00));
+        goal.setSavedAmount(BigDecimal.valueOf(500.00));
+        goal.setDeadline(LocalDateTime.now().plusDays(10));
 
+        when(goalService.getGoalById(1L)).thenReturn(Optional.of(goal));
+
+        mockMvc.perform(get("/api/goals/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Test Goal"));
     }
 }
