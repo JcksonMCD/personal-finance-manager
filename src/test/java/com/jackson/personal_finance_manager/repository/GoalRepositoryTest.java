@@ -58,7 +58,7 @@ public class GoalRepositoryTest {
 
         // Assert
         assertNotNull(savedGoal.getGoalID());
-        assertEquals("Test Goal", savedGoal.getName())
+        assertEquals("Test Goal", savedGoal.getName());
     }
 
 }
