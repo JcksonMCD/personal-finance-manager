@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,4 +77,16 @@ public class GoalRepositoryTest {
         assertEquals("Find By ID Goal", foundGoal.get().getName());
     }
 
+    @Test
+    void testFindAllGoals() {
+        // Arrange
+        goalRepository.save(createGoal("Goal 1", BigDecimal.valueOf(1000.00), BigDecimal.valueOf(500.00), 10));
+        goalRepository.save(createGoal("Goal 2", BigDecimal.valueOf(2000.00), BigDecimal.valueOf(1500.00), 15));
+
+        // Act
+        List<Goal> goals = goalRepository.findAll();
+
+        // Assert
+        assertEquals(2, goals.size());
+    }
 }
