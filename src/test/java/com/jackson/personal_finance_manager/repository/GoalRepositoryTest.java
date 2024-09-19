@@ -30,5 +30,15 @@ public class GoalRepositoryTest {
         userRepository.save(user);
     }
 
+    // Helper method for goal initialisation
+    private Goal createGoal(String name, BigDecimal targetAmount, BigDecimal savedAmount, int deadlineDays) {
+        Goal goal = new Goal();
+        goal.setUser(user);
+        goal.setName(name);
+        goal.setTargetAmount(targetAmount);
+        goal.setSavedAmount(savedAmount);
+        goal.setDeadline(LocalDateTime.now().plusDays(deadlineDays));
+        return goal;
+    }
 
 }
