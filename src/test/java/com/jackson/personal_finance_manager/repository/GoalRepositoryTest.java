@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@ActiveProfiles("test")
 public class GoalRepositoryTest {
 
     @Autowired
@@ -27,6 +31,9 @@ public class GoalRepositoryTest {
     void setUp() {
         user = new User();
         user.setName("Test User");
+        user.setEmail("test@example.com");
+        user.setUsername("testuser");
+        user.setPasswordHash("encryptedPassword");
         userRepository.save(user);
     }
 
@@ -39,6 +46,19 @@ public class GoalRepositoryTest {
         goal.setSavedAmount(savedAmount);
         goal.setDeadline(LocalDateTime.now().plusDays(deadlineDays));
         return goal;
+    }
+
+    @Test
+    void testSaveGoal() {
+        // Arrange
+        Goal goal = createGoal("Test Goal", BigDecimal.valueOf(1000.00), BigDecimal.valueOf(500.00), 10);
+
+        // Act
+        Goal savedGoal = goalRepository.save(goal);
+
+        // Assert
+        assertNotNull(savedGoal.getGoalID());
+        assertEquals("Test Goal", savedGoal.getName())
     }
 
 }
