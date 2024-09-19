@@ -89,4 +89,19 @@ public class GoalRepositoryTest {
         // Assert
         assertEquals(2, goals.size());
     }
+    
+    @Test
+    void testDeleteGoal() {
+        // Arrange
+        Goal goal = createGoal("Goal to Delete", BigDecimal.valueOf(500.00), BigDecimal.valueOf(100.00), 5);
+        Goal savedGoal = goalRepository.save(goal);
+        Long goalId = savedGoal.getGoalID();
+
+        // Act
+        goalRepository.deleteById(goalId);
+        Optional<Goal> deletedGoal = goalRepository.findById(goalId);
+
+        // Assert
+        assertFalse(deletedGoal.isPresent());
+    }
 }
