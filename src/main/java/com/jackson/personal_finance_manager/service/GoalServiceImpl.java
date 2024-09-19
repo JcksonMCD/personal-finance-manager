@@ -13,6 +13,6 @@ public class GoalServiceImpl implements GoalService{
 
     @Override
     public Goal saveGoal(Goal goal) {
-        return null;
+        return goalRepository.save(goal);
     }
 }
