@@ -2,6 +2,7 @@ package com.jackson.personal_finance_manager.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,18 +30,11 @@ public class Goal {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    public Goal(Long goalID, User user, String name, BigDecimal targetAmount, BigDecimal savedAmount, LocalDateTime deadline, LocalDateTime createdAt) {
-        this.goalID = goalID;
-        this.user = user;
-        this.name = name;
-        this.targetAmount = targetAmount;
-        this.savedAmount = savedAmount;
-        this.deadline = deadline;
-        this.createdAt = createdAt;
+    
+    public Goal() {
     }
 
-    public Goal() {
+    public Goal(int i, String s, double v, double v1, LocalDate of, LocalDateTime now) {
     }
 
     public Long getGoalID() {
