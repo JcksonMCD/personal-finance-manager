@@ -5,6 +5,7 @@ import com.jackson.personal_finance_manager.repository.GoalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,10 @@ public class GoalServiceImpl implements GoalService{
     @Override
     public Optional<Goal> getGoalById(Long goalId) {
         return goalRepository.findById(goalId);
+    }
+
+    @Override
+    public List<Goal> getAllGoals() {
+        return goalRepository.findAll();
     }
 }
