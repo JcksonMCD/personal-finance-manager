@@ -30,7 +30,7 @@ public class Goal {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-    
+
     public Goal() {
     }
 

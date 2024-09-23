@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -26,5 +27,11 @@ public class GoalController {
     public ResponseEntity<Goal> getGoalById(@PathVariable Long id) {
         Optional<Goal> goal = goalService.getGoalById(id);
         return goal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Goal>> getAllGoals() {
+        List<Goal> goals = goalService.getAllGoals();
+        return ResponseEntity.ok(goals);
     }
 }
