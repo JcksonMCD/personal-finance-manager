@@ -18,12 +18,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,4 +79,32 @@ class GoalControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Goal"));
     }
+
+    @Test
+    void testGetAllGoals() throws Exception {
+        // Arrange:
+        Goal goal1 = new Goal();
+        goal1.setGoalID(1L);
+        goal1.setName("Goal 1");
+        goal1.setTargetAmount(new BigDecimal("1000.00"));
+        goal1.setSavedAmount(new BigDecimal("200.00"));
+        goal1.setDeadline(LocalDate.of(2024, 12, 31).atStartOfDay());
+        goal1.setCreatedAt(LocalDateTime.now());
+
+        List<Goal> mockGoals = Arrays.asList(goal1);
+
+        // Mock the service method
+        when(goalService.getAllGoals()).thenReturn(mockGoals);
+
+        // Act & Assert:
+        mockMvc.perform(get("/api/goals"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].goalID").value(1))
+                .andExpect(jsonPath("$[0].name").value("Goal 1"))
+                .andExpect(jsonPath("$[0].targetAmount").value(1000.00))
+                .andExpect(jsonPath("$[0].savedAmount").value(200.00))
+                .andExpect(jsonPath("$[0].deadline").exists())
+                .andExpect(jsonPath("$[0].createdAt").exists());
+    }
+
 }
